@@ -1,6 +1,5 @@
 import React from "react";
 import { t, langLabel } from "../i18n/index.js";
-import { Link } from "react-router-dom"; // если у тебя нет react-router-dom, убери эту строку
 import logo from "../assets/logoSHYM.png";
 
 export default function Layout({
@@ -15,7 +14,11 @@ export default function Layout({
   return (
     <div className="app">
       <header className="topbar">
-        <div className="brand" onClick={() => onNavigate("home")} style={{ cursor: "pointer" }}>
+        <div
+          className="brand"
+          onClick={() => onNavigate("home")}
+          style={{ cursor: "pointer" }}
+        >
           <img
             src={logo}
             alt="Smart City Shymkent"
@@ -34,12 +37,14 @@ export default function Layout({
           >
             {t(lang, "nav.home")}
           </button>
+
           <button
             className={`navBtn ${route === "report" ? "active" : ""}`}
             onClick={() => onNavigate("report")}
           >
             {t(lang, "nav.report")}
           </button>
+
           <button
             className={`navBtn ${route === "admin" ? "active" : ""}`}
             onClick={() => onNavigate("admin")}
@@ -68,9 +73,7 @@ export default function Layout({
 
       <main className="content">{children}</main>
 
-      <footer className="footer">
-        MVP prototype • Smart City Shymkent
-      </footer>
+      <footer className="footer">MVP prototype • Smart City Shymkent</footer>
     </div>
   );
 }
