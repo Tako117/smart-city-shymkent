@@ -194,7 +194,7 @@ export default function Home({ onNavigate, lang }) {
             {t(lang, "home.map.error")} <span className="muted">{mapError}</span>
           </div>
         ) : null}
-        <CityMap complaints={complaints} />
+        <CityMap complaints={complaints} lang={lang} />
       </div>
 
       {/* 7) КОНТАКТЫ */}

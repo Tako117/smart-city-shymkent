@@ -2,6 +2,7 @@
 import React, { useMemo } from "react";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet";
+import { t } from "../i18n/index.js";
 
 /**
  * modes:
@@ -30,11 +31,11 @@ function formatDate(iso) {
   }
 }
 
-function statusLabel(status) {
-  if (status === "DONE") return "Очищено / решено";
-  if (status === "IN_PROGRESS") return "В работе";
-  if (status === "NEW") return "Новое";
-  if (status === "REJECTED") return "Отклонено";
+function statusLabel(status, lang) {
+  if (status === "DONE") return t(lang, "map.status.DONE");
+  if (status === "IN_PROGRESS") return t(lang, "map.status.IN_PROGRESS");
+  if (status === "NEW") return t(lang, "map.status.NEW");
+  if (status === "REJECTED") return t(lang, "map.status.REJECTED");
   return status || "-";
 }
 
@@ -93,6 +94,7 @@ export default function CityMap({
   gridSize = 0.01,
   title = "Интерактивная карта города",
   subtitle = "Визуализация строится на данных проекта. Без интеграции с акиматом.",
+  lang = "ru",
 }) {
   // Центр Шымкента
   const center = [42.315, 69.59];
@@ -113,31 +115,29 @@ export default function CityMap({
   const legend = useMemo(() => {
     if (mode === "heatmap") {
       return [
-        { label: "Низкая активность", dot: "heatLow" },
-        { label: "Средняя активность", dot: "heatMid" },
-        { label: "Высокая активность", dot: "heatHigh" },
+        { label: t(lang, "map.legend.heat.low"), dot: "heatLow" },
+        { label: t(lang, "map.legend.heat.mid"), dot: "heatMid" },
+        { label: t(lang, "map.legend.heat.high"), dot: "heatHigh" },
       ];
     }
     if (mode === "zones") {
       return [
-        { label: "Очищено / решено (DONE)", dot: "zoneDone" },
-        { label: "Проблемная зона (NEW/IN_PROGRESS)", dot: "zoneProblem" },
-        { label: "Отклонено (REJECTED)", dot: "zoneRejected" },
+        { label: t(lang, "map.legend.zones.done"), dot: "zoneDone" },
+        { label: t(lang, "map.legend.zones.problem"), dot: "zoneProblem" },
+        { label: t(lang, "map.legend.zones.rejected"), dot: "zoneRejected" },
       ];
     }
-    return [
-      { label: "Точка обращения", dot: "markerDot" },
-    ];
-  }, [mode]);
+    return [{ label: t(lang, "map.legend.marker"), dot: "markerDot" }];
+  }, [mode, lang]);
 
   return (
     <div className="card mapCard">
       <div className="mapHead">
         <div>
-          <div className="sectionTitleBig">{title}</div>
-          <div className="muted mapSub">{subtitle}</div>
+          <div className="sectionTitleBig">{t(lang, "map.title") || title}</div>
+          <div className="muted mapSub">{t(lang, "map.subtitle") || subtitle}</div>
           <div className="mapDisclaimer">
-            ❌ Жалобы <b>не отправляются напрямую в акимат</b>. ✅ Платформа принимает обращения, анализирует и визуализирует.
+            ❌ {t(lang, "map.disclaimer.no_akimat")} ✅ {t(lang, "map.disclaimer.platform")}
           </div>
         </div>
 
@@ -167,9 +167,11 @@ export default function CityMap({
                   pathOptions={{ color: col.stroke, fillColor: col.fill, fillOpacity: 0.75, weight: 2 }}
                 >
                   <Popup>
-                    <b>{c.ui_category || "Категория"}</b>
+                    <b>{c.ui_category || t(lang, "map.popup.category_fallback")}</b>
                     <div style={{ marginTop: 6 }}>{c.text || ""}</div>
-                    <div style={{ marginTop: 6, opacity: 0.85 }}>Status: {statusLabel(c.status)}</div>
+                    <div style={{ marginTop: 6, opacity: 0.85 }}>
+                      {t(lang, "map.popup.status")}: {statusLabel(c.status, lang)}
+                    </div>
                     <div style={{ marginTop: 6, opacity: 0.75 }}>{formatDate(c.created_at)}</div>
                   </Popup>
                 </CircleMarker>
@@ -197,18 +199,22 @@ export default function CityMap({
                   }}
                 >
                   <Popup>
-                    <b>Активность в зоне</b>
-                    <div style={{ marginTop: 6 }}>Всего обращений: <b>{cell.count}</b></div>
+                    <b>{t(lang, "map.popup.activity_title")}</b>
+                    <div style={{ marginTop: 6 }}>
+                      {t(lang, "map.popup.total")}: <b>{cell.count}</b>
+                    </div>
                     <div style={{ marginTop: 6, opacity: 0.85 }}>
-                      Очищено (DONE): {cell.done} • В работе/новые: {cell.active} • Отклонено: {cell.rejected}
+                      {t(lang, "map.popup.done")}: {cell.done} • {t(lang, "map.popup.active")}: {cell.active} •{" "}
+                      {t(lang, "map.popup.rejected")}: {cell.rejected}
                     </div>
                     {cell.items.length ? (
                       <div style={{ marginTop: 10 }}>
-                        <div style={{ fontWeight: 700, marginBottom: 6 }}>Примеры:</div>
+                        <div style={{ fontWeight: 700, marginBottom: 6 }}>{t(lang, "map.popup.examples")}</div>
                         <ul style={{ margin: 0, paddingLeft: 18 }}>
                           {cell.items.map((it) => (
                             <li key={it.id} style={{ marginBottom: 4 }}>
-                              {it.ui_category || "—"} — <span style={{ opacity: 0.8 }}>{statusLabel(it.status)}</span>
+                              {it.ui_category || "—"} —{" "}
+                              <span style={{ opacity: 0.8 }}>{statusLabel(it.status, lang)}</span>
                             </li>
                           ))}
                         </ul>
@@ -240,12 +246,21 @@ export default function CityMap({
                   }}
                 >
                   <Popup>
-                    <b>{c.ui_category || "Категория"}</b>
+                    <b>{c.ui_category || t(lang, "map.popup.category_fallback")}</b>
                     <div style={{ marginTop: 6 }}>{c.text || ""}</div>
                     <div style={{ marginTop: 6, opacity: 0.85 }}>
-                      Зона: <b>{c.status === "DONE" ? "Очищенная" : c.status === "REJECTED" ? "Отклонена" : "Проблемная"}</b>
+                      {t(lang, "map.popup.zone")}{" "}
+                      <b>
+                        {c.status === "DONE"
+                          ? t(lang, "map.zone.cleaned")
+                          : c.status === "REJECTED"
+                          ? t(lang, "map.zone.rejected")
+                          : t(lang, "map.zone.problem")}
+                      </b>
                     </div>
-                    <div style={{ marginTop: 6, opacity: 0.85 }}>Status: {statusLabel(c.status)}</div>
+                    <div style={{ marginTop: 6, opacity: 0.85 }}>
+                      {t(lang, "map.popup.status")}: {statusLabel(c.status, lang)}
+                    </div>
                     <div style={{ marginTop: 6, opacity: 0.75 }}>{formatDate(c.created_at)}</div>
                   </Popup>
                 </CircleMarker>

@@ -2,12 +2,10 @@
   "nav.home": "Home",
   "nav.report": "Report",
   "nav.admin": "Dashboard",
-
   "home.title": "Unified city-issues platform",
   "home.subtitle": "Residents submit a photo and geolocation — AI analyzes image + text, then routes the complaint to the responsible service.",
   "home.btn.report": "Report an issue",
   "home.btn.admin": "Open Dashboard",
-
   "home.pill": "Smart City • MVP",
   "home.note.title": "Important",
   "home.note.text": "Complaints are not sent directly to the Akimat. The platform collects requests, analyzes them, visualizes them, and prepares data for possible future integration.",
@@ -17,10 +15,8 @@
   "home.stats.transparency.value": "Open analytics",
   "home.stats.focus.label": "Focus",
   "home.stats.focus.value": "City ecology",
-
   "home.visual.title": "City in numbers",
   "home.visual.text": "Fast issue capture → auto-classification → dashboard → data ready for decisions.",
-
   "home.kpi.speed.title": "Speed",
   "home.kpi.speed.value": "Minutes",
   "home.kpi.speed.sub": "to submit",
@@ -33,7 +29,6 @@
   "home.kpi.transparency.title": "Transparency",
   "home.kpi.transparency.value": "Dashboard",
   "home.kpi.transparency.sub": "for the city",
-
   "home.problems.title": "What issues can be reported",
   "home.problems.subtitle": "Choose the request type — the platform helps structure and visualize data.",
   "home.problems.hint": "Click to report",
@@ -42,7 +37,6 @@
   "home.problems.cards.water_dumping": "Waste dumping into water",
   "home.problems.cards.trash_burning": "Trash burning",
   "home.problems.cards.tree_cutting": "Tree cutting",
-
   "home.invest.title": "Why is this important for the city?",
   "home.invest.subtitle": "Short and professional — positioned as a smart city startup.",
   "home.invest.cards.speed.title": "Speeds up complaint processing",
@@ -55,15 +49,12 @@
   "home.invest.cards.opendata.text": "Heatmap and trends help track dynamics and support data-driven decisions.",
   "home.disclaimer.bold": "Important:",
   "home.disclaimer.text": "the service does not imitate government integrations. It is an independent platform for collecting, analyzing, and visualizing reports.",
-
   "home.map.error": "Map: failed to load data.",
-
   "home.contacts.title": "Contact us",
   "home.contacts.subtitle": "User questions • feedback • contacts for partners and city representatives",
   "home.contacts.email": "Email",
   "home.contacts.phone": "Phone",
   "home.contacts.instagram": "Instagram",
-
   "report.title": "Report an issue",
   "report.subtitle": "Upload a photo and description. Backend AI will detect relevance, category, urgency, and department.",
   "report.step1": "1) Photo",
@@ -83,7 +74,6 @@
   "report.sent.id": "ID",
   "report.sent.toAdmin": "Go to Dashboard",
   "report.sent.home": "Back to Home",
-
   "admin.title": "Dashboard",
   "admin.subtitle": "Complaints list, filters, stats, status updates.",
   "admin.refresh": "Refresh",
@@ -93,18 +83,42 @@
   "admin.chart": "Chart: last 7 days",
   "admin.list": "Complaints",
   "admin.none": "No data for selected filters.",
-
   "status.NEW": "New",
   "status.IN_PROGRESS": "In progress",
   "status.DONE": "Done",
   "status.REJECTED": "Rejected (irrelevant)",
-
   "ai.cv": "AI (image)",
   "ai.nlp": "AI (text)",
   "ai.urgency": "Urgency",
   "ai.department": "Department",
   "ai.explain": "Explanation",
-
   "theme.dark": "Dark",
-  "theme.light": "Light"
+  "theme.light": "Light",
+  "map.title": "Interactive city map",
+  "map.subtitle": "Visualization is based on the project's data. No integration with the Akimat.",
+  "map.disclaimer.no_akimat": "Complaints are NOT sent directly to the Akimat.",
+  "map.disclaimer.platform": "The platform accepts reports, analyzes, and visualizes them.",
+  "map.legend.marker": "Report point",
+  "map.legend.heat.low": "Low activity",
+  "map.legend.heat.mid": "Medium activity",
+  "map.legend.heat.high": "High activity",
+  "map.legend.zones.done": "Cleaned / resolved (DONE)",
+  "map.legend.zones.problem": "Problem zone (NEW/IN_PROGRESS)",
+  "map.legend.zones.rejected": "Rejected (REJECTED)",
+  "map.popup.category_fallback": "Category",
+  "map.popup.status": "Status",
+  "map.popup.activity_title": "Area activity",
+  "map.popup.total": "Total reports",
+  "map.popup.done": "Cleaned (DONE)",
+  "map.popup.active": "In progress / new",
+  "map.popup.rejected": "Rejected",
+  "map.popup.examples": "Examples:",
+  "map.popup.zone": "Zone:",
+  "map.zone.cleaned": "Cleaned",
+  "map.zone.problem": "Problem",
+  "map.zone.rejected": "Rejected",
+  "map.status.DONE": "Cleaned / resolved",
+  "map.status.IN_PROGRESS": "In progress",
+  "map.status.NEW": "New",
+  "map.status.REJECTED": "Rejected"
 }

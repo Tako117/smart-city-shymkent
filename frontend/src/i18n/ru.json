@@ -106,5 +106,37 @@
   "ai.explain": "Обоснование",
 
   "theme.dark": "Тёмная",
-  "theme.light": "Светлая"
+  "theme.light": "Светлая",
+  "map.title": "Интерактивная карта города",
+  "map.subtitle": "Визуализация строится на данных проекта. Без интеграции с акиматом.",
+  "map.disclaimer.no_akimat": "Жалобы не отправляются напрямую в акимат.",
+  "map.disclaimer.platform": "Платформа принимает обращения, анализирует и визуализирует.",
+
+  "map.legend.marker": "Точка обращения",
+  "map.legend.heat.low": "Низкая активность",
+  "map.legend.heat.mid": "Средняя активность",
+  "map.legend.heat.high": "Высокая активность",
+  "map.legend.zones.done": "Очищено / решено (DONE)",
+  "map.legend.zones.problem": "Проблемная зона (NEW/IN_PROGRESS)",
+  "map.legend.zones.rejected": "Отклонено (REJECTED)",
+
+  "map.popup.category_fallback": "Категория",
+  "map.popup.status": "Статус",
+  "map.popup.activity_title": "Активность в зоне",
+  "map.popup.total": "Всего обращений",
+  "map.popup.done": "Очищено (DONE)",
+  "map.popup.active": "В работе/новые",
+  "map.popup.rejected": "Отклонено",
+  "map.popup.examples": "Примеры:",
+  "map.popup.zone": "Зона:",
+
+  "map.zone.cleaned": "Очищенная",
+  "map.zone.problem": "Проблемная",
+  "map.zone.rejected": "Отклонена",
+
+  "map.status.DONE": "Очищено / решено",
+  "map.status.IN_PROGRESS": "В работе",
+  "map.status.NEW": "Новое",
+  "map.status.REJECTED": "Отклонено"
+
 }

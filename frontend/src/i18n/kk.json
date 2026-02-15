@@ -106,5 +106,38 @@
   "ai.explain": "Негіздеме",
 
   "theme.dark": "Қараңғы",
-  "theme.light": "Жарық"
+  "theme.light": "Жарық",
+
+  "map.title": "Қаланың интерактивті картасы",
+  "map.subtitle": "Визуализация жоба деректері негізінде құрылады. Әкімдікпен интеграция жоқ.",
+  "map.disclaimer.no_akimat": "Өтініштер тікелей әкімдікке жіберілмейді.",
+  "map.disclaimer.platform": "Платформа өтініштерді қабылдайды, талдайды және визуализациялайды.",
+
+  "map.legend.marker": "Өтініш нүктесі",
+  "map.legend.heat.low": "Төмен белсенділік",
+  "map.legend.heat.mid": "Орташа белсенділік",
+  "map.legend.heat.high": "Жоғары белсенділік",
+  "map.legend.zones.done": "Тазартылды / шешілді (DONE)",
+  "map.legend.zones.problem": "Мәселе аймағы (NEW/IN_PROGRESS)",
+  "map.legend.zones.rejected": "Қайтарылды (REJECTED)",
+
+  "map.popup.category_fallback": "Санат",
+  "map.popup.status": "Мәртебе",
+  "map.popup.activity_title": "Аймақ белсенділігі",
+  "map.popup.total": "Барлық өтініштер",
+  "map.popup.done": "Тазартылды (DONE)",
+  "map.popup.active": "Жұмыста/жаңа",
+  "map.popup.rejected": "Қайтарылды",
+  "map.popup.examples": "Мысалдар:",
+  "map.popup.zone": "Аймақ:",
+
+  "map.zone.cleaned": "Тазартылған",
+  "map.zone.problem": "Мәселелі",
+  "map.zone.rejected": "Қайтарылған",
+
+  "map.status.DONE": "Тазартылды / шешілді",
+  "map.status.IN_PROGRESS": "Жұмыста",
+  "map.status.NEW": "Жаңа",
+  "map.status.REJECTED": "Қайтарылды"
+
 }
