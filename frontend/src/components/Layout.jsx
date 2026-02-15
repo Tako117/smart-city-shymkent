@@ -1,6 +1,6 @@
-// src/components/Layout.jsx
 import React from "react";
 import { t, langLabel } from "../i18n/index.js";
+import { Link } from "react-router-dom"; // если у тебя нет react-router-dom, убери эту строку
 import logo from "../assets/logoSHYM.png";
 
 export default function Layout({
@@ -15,13 +15,17 @@ export default function Layout({
   return (
     <div className="app">
       <header className="topbar">
-        <button className="brand brandBtn" onClick={() => onNavigate("home")} aria-label="Go to home">
-          <img className="brandLogo" src={logo} alt="Smart City Shymkent" />
-          <div className="brandText">
+        <div className="brand" onClick={() => onNavigate("home")} style={{ cursor: "pointer" }}>
+          <img
+            src={logo}
+            alt="Smart City Shymkent"
+            className="brandLogo"
+          />
+          <div>
             <div className="brandTitle">Smart City Shymkent</div>
             <div className="brandSub">Unified city issues</div>
           </div>
-        </button>
+        </div>
 
         <nav className="nav">
           <button
@@ -64,18 +68,8 @@ export default function Layout({
 
       <main className="content">{children}</main>
 
-      <footer className="footer footerRow">
-        <div className="footerLeft">
-          <img className="footerLogo" src={logo} alt="Smart City Shymkent" />
-          <div>
-            <div className="footerTitle">Smart City Shymkent</div>
-            <div className="footerSub muted">
-              MVP prototype • Платформа принимает обращения, анализирует и визуализирует данные (без интеграции с акиматом)
-            </div>
-          </div>
-        </div>
-
-        <div className="footerRight muted">© {new Date().getFullYear()}</div>
+      <footer className="footer">
+        MVP prototype • Smart City Shymkent
       </footer>
     </div>
   );
