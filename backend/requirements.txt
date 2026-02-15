@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic
+python-multipart
+
+
+transformers
+torch
+torchvision
+pillow
+protobuf
+sentencepiece
+safetensors
+huggingface-hub
+psycopg2-binary
