@@ -206,11 +206,11 @@ export default function Home({ onNavigate, lang }) {
         <div className="contactGrid">
           <div className="contactCard">
             <div className="contactLabel muted">Email</div>
-            <div className="contactValue">[вставить email]</div>
+            <div className="contactValue">smart.shym_city@mail.ru</div>
           </div>
           <div className="contactCard">
             <div className="contactLabel muted">Телефон</div>
-            <div className="contactValue">[вставить телефон]</div>
+            <div className="contactValue">8 705 845 80 43</div>
           </div>
         </div>
       </div>
