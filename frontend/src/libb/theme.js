@@ -1,6 +1,7 @@
-// src/lib/theme.js
+// src/libb/theme.js
 export function getDefaultTheme() {
-  return localStorage.getItem("theme") || "dark";
+  const t = localStorage.getItem("theme");
+  return t === "light" || t === "dark" ? t : "dark";
 }
 
 export function applyTheme(theme) {

@@ -2,6 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { t } from "../i18n/index.js";
 import { listComplaints, patchComplaint } from "../libb/api.js";
+import CityMap from "../components/CityMap.jsx";
 
 const UI_CATEGORIES = [
   "Все",
@@ -45,6 +46,46 @@ function formatDate(iso) {
   }
 }
 
+function toNum(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
+function clamp(n, a, b) {
+  return Math.max(a, Math.min(b, n));
+}
+
+function buildGridHotspots(reports, gridSize = 0.01) {
+  const map = new Map(); // key -> { key, lat, lng, count, done, active }
+  for (const r of reports) {
+    const lat = toNum(r.lat);
+    const lng = toNum(r.lng);
+    if (lat == null || lng == null) continue;
+
+    const glat = Math.floor(lat / gridSize) * gridSize;
+    const glng = Math.floor(lng / gridSize) * gridSize;
+    const key = `${glat.toFixed(5)}:${glng.toFixed(5)}`;
+
+    if (!map.has(key)) {
+      map.set(key, {
+        key,
+        lat: glat + gridSize / 2,
+        lng: glng + gridSize / 2,
+        count: 0,
+        done: 0,
+        active: 0,
+      });
+    }
+    const cell = map.get(key);
+    cell.count += 1;
+    if (r.status === "DONE") cell.done += 1;
+    else if (r.status !== "REJECTED") cell.active += 1;
+  }
+
+  const arr = Array.from(map.values()).sort((a, b) => b.count - a.count);
+  return arr.slice(0, 6);
+}
+
 export default function Admin({ onNavigate, lang }) {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -52,6 +93,10 @@ export default function Admin({ onNavigate, lang }) {
 
   const [filterCat, setFilterCat] = useState("Все");
   const [filterStatus, setFilterStatus] = useState("Все");
+
+  // карта/аналитика
+  const [mapMode, setMapMode] = useState("heatmap"); // markers | heatmap | zones
+  const [gridSize, setGridSize] = useState(0.01); // можно менять: 0.005 - плотнее
 
   async function refresh() {
     setErr("");
@@ -103,14 +148,41 @@ export default function Admin({ onNavigate, lang }) {
     return { keys, counts, max };
   }, [reports]);
 
+  const categoryTop = useMemo(() => {
+    const m = new Map();
+    for (const r of reports) {
+      const key = r.ui_category || "—";
+      m.set(key, (m.get(key) || 0) + 1);
+    }
+    return Array.from(m.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 6);
+  }, [reports]);
+
+  const hotspots = useMemo(() => {
+    return buildGridHotspots(reports, gridSize);
+  }, [reports, gridSize]);
+
+  const mapSubtitle = useMemo(() => {
+    if (mapMode === "markers") return "Точки обращений с попапами. Данные проекта. Без интеграций с акиматом.";
+    if (mapMode === "zones") return "Зоны: DONE = очищено/решено; NEW/IN_PROGRESS = проблемно. Только данные проекта.";
+    return "Heatmap активности пользователей по обращениям. Только данные проекта.";
+  }, [mapMode]);
+
   return (
     <div className="stack">
+      {/* Header + KPIs */}
       <div className="card">
         <div className="row spaceBetween">
           <div>
             <h2>{t(lang, "admin.title")}</h2>
             <p className="muted">{t(lang, "admin.subtitle")}</p>
+
+            <div className="adminDisclaimer">
+              ❌ Жалобы не отправляются напрямую в акимат. ✅ Платформа принимает, анализирует и визуализирует обращения.
+            </div>
           </div>
+
           <button className="btn" onClick={refresh} disabled={loading}>
             {loading ? "…" : t(lang, "admin.refresh")}
           </button>
@@ -127,6 +199,107 @@ export default function Admin({ onNavigate, lang }) {
         </div>
       </div>
 
+      {/* Map + analytics */}
+      <div className="card">
+        <div className="row spaceBetween">
+          <div>
+            <div className="sectionTitle">Карта и аналитика</div>
+            <div className="muted">
+              Отображение активности пользователей и зон на основе обращений проекта. Без государственных интеграций.
+            </div>
+          </div>
+
+          <div className="row gap">
+            <div className="segmented">
+              <button
+                className={`segBtn ${mapMode === "markers" ? "active" : ""}`}
+                onClick={() => setMapMode("markers")}
+              >
+                Точки
+              </button>
+              <button
+                className={`segBtn ${mapMode === "heatmap" ? "active" : ""}`}
+                onClick={() => setMapMode("heatmap")}
+              >
+                Heatmap
+              </button>
+              <button
+                className={`segBtn ${mapMode === "zones" ? "active" : ""}`}
+                onClick={() => setMapMode("zones")}
+              >
+                Зоны
+              </button>
+            </div>
+
+            <select
+              className="selectSmall"
+              value={String(gridSize)}
+              onChange={(e) => setGridSize(Number(e.target.value))}
+              aria-label="Grid size"
+              title="Плотность сетки heatmap"
+            >
+              <option value="0.02">Сетка: крупная</option>
+              <option value="0.01">Сетка: средняя</option>
+              <option value="0.005">Сетка: плотная</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="split" style={{ marginTop: 12 }}>
+          <div className="card" style={{ padding: 14 }}>
+            <div className="sectionTitle">Топ категорий</div>
+            {categoryTop.length === 0 ? (
+              <div className="muted">Нет данных</div>
+            ) : (
+              <div className="stack">
+                {categoryTop.map(([name, count]) => (
+                  <div key={name} className="row spaceBetween">
+                    <div className="muted">{name}</div>
+                    <div className="badge">{count}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="card" style={{ padding: 14 }}>
+            <div className="sectionTitle">Hotspots по активности</div>
+            <div className="muted" style={{ marginBottom: 10 }}>
+              Сетка {gridSize}° • топ зон по количеству обращений
+            </div>
+
+            {hotspots.length === 0 ? (
+              <div className="muted">Нет координат у обращений</div>
+            ) : (
+              <div className="stack">
+                {hotspots.map((h) => (
+                  <div key={h.key} className="row spaceBetween">
+                    <div className="muted">
+                      {h.lat.toFixed(4)}, {h.lng.toFixed(4)}
+                      <div style={{ fontSize: 12, opacity: 0.85 }}>
+                        Очищено: {h.done} • Проблемно: {h.active}
+                      </div>
+                    </div>
+                    <div className="badge">{h.count}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div style={{ marginTop: 12 }}>
+          <CityMap
+            complaints={reports}
+            mode={mapMode}
+            gridSize={gridSize}
+            title="Интерактивная карта города"
+            subtitle={mapSubtitle}
+          />
+        </div>
+      </div>
+
+      {/* Filters */}
       <div className="card">
         <div className="sectionTitle">{t(lang, "admin.filters")}</div>
         <div className="split">
@@ -139,12 +312,17 @@ export default function Admin({ onNavigate, lang }) {
           <div>
             <label className="label">{t(lang, "admin.filter.status")}</label>
             <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
-              {STATUS.map((s) => <option key={s} value={s}>{s === "Все" ? "Все" : t(lang, `status.${s}`)}</option>)}
+              {STATUS.map((s) => (
+                <option key={s} value={s}>
+                  {s === "Все" ? "Все" : t(lang, `status.${s}`)}
+                </option>
+              ))}
             </select>
           </div>
         </div>
       </div>
 
+      {/* Chart */}
       <div className="card">
         <div className="sectionTitle">{t(lang, "admin.chart")}</div>
         <div className="chart">
@@ -164,6 +342,7 @@ export default function Admin({ onNavigate, lang }) {
         </div>
       </div>
 
+      {/* List */}
       <div className="card">
         <div className="row spaceBetween">
           <div className="sectionTitle">{t(lang, "admin.list")} ({filtered.length})</div>
@@ -178,7 +357,9 @@ export default function Admin({ onNavigate, lang }) {
               <div key={r.id} className="card reportCard">
                 <div className="reportMid">
                   <div className="row gap">
-                    <span className={`badge ${r.status === "REJECTED" ? "danger" : ""}`}>{t(lang, `status.${r.status}`)}</span>
+                    <span className={`badge ${r.status === "REJECTED" ? "danger" : ""}`}>
+                      {t(lang, `status.${r.status}`)}
+                    </span>
                     <span className="muted">{formatDate(r.created_at)}</span>
                   </div>
 
@@ -187,12 +368,16 @@ export default function Admin({ onNavigate, lang }) {
 
                   <div className="aiLine">
                     <span className="aiTag">{t(lang, "ai.cv")}:</span>
-                    <span className="muted">{r.cv_label} • {Number(r.cv_score).toFixed(3)} • relevant: {r.is_relevant === "1" ? "true" : "false"}</span>
+                    <span className="muted">
+                      {r.cv_label} • {Number(r.cv_score).toFixed(3)} • relevant: {r.is_relevant === "1" ? "true" : "false"}
+                    </span>
                   </div>
 
                   <div className="aiLine">
                     <span className="aiTag">{t(lang, "ai.nlp")}:</span>
-                    <span className="muted">{r.nlp_category} • conf: {Number(r.nlp_confidence).toFixed(3)} • {t(lang, "ai.urgency")}: {r.nlp_urgency}</span>
+                    <span className="muted">
+                      {r.nlp_category} • conf: {Number(r.nlp_confidence).toFixed(3)} • {t(lang, "ai.urgency")}: {r.nlp_urgency}
+                    </span>
                   </div>
 
                   <div className="desc">{r.text || "—"}</div>

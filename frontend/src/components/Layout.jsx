@@ -1,6 +1,7 @@
 // src/components/Layout.jsx
 import React from "react";
 import { t, langLabel } from "../i18n/index.js";
+import logo from "../assets/logoSHYM.png";
 
 export default function Layout({
   route,
@@ -14,22 +15,31 @@ export default function Layout({
   return (
     <div className="app">
       <header className="topbar">
-        <div className="brand">
-          <div className="logo">S</div>
-          <div>
+        <button className="brand brandBtn" onClick={() => onNavigate("home")} aria-label="Go to home">
+          <img className="brandLogo" src={logo} alt="Smart City Shymkent" />
+          <div className="brandText">
             <div className="brandTitle">Smart City Shymkent</div>
             <div className="brandSub">Unified city issues</div>
           </div>
-        </div>
+        </button>
 
         <nav className="nav">
-          <button className={`navBtn ${route === "home" ? "active" : ""}`} onClick={() => onNavigate("home")}>
+          <button
+            className={`navBtn ${route === "home" ? "active" : ""}`}
+            onClick={() => onNavigate("home")}
+          >
             {t(lang, "nav.home")}
           </button>
-          <button className={`navBtn ${route === "report" ? "active" : ""}`} onClick={() => onNavigate("report")}>
+          <button
+            className={`navBtn ${route === "report" ? "active" : ""}`}
+            onClick={() => onNavigate("report")}
+          >
             {t(lang, "nav.report")}
           </button>
-          <button className={`navBtn ${route === "admin" ? "active" : ""}`} onClick={() => onNavigate("admin")}>
+          <button
+            className={`navBtn ${route === "admin" ? "active" : ""}`}
+            onClick={() => onNavigate("admin")}
+          >
             {t(lang, "nav.admin")}
           </button>
         </nav>
@@ -54,8 +64,18 @@ export default function Layout({
 
       <main className="content">{children}</main>
 
-      <footer className="footer">
-        MVP prototype • Smart City Shymkent
+      <footer className="footer footerRow">
+        <div className="footerLeft">
+          <img className="footerLogo" src={logo} alt="Smart City Shymkent" />
+          <div>
+            <div className="footerTitle">Smart City Shymkent</div>
+            <div className="footerSub muted">
+              MVP prototype • Платформа принимает обращения, анализирует и визуализирует данные (без интеграции с акиматом)
+            </div>
+          </div>
+        </div>
+
+        <div className="footerRight muted">© {new Date().getFullYear()}</div>
       </footer>
     </div>
   );
