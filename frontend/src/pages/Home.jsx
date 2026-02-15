@@ -5,11 +5,11 @@ import CityMap from "../components/CityMap.jsx";
 import { listComplaints } from "../libb/api.js";
 
 const PROBLEM_CARDS = [
-  { icon: "🗑", title: "Незаконные свалки" },
-  { icon: "🌫", title: "Загрязнение воздуха" },
-  { icon: "💧", title: "Сброс отходов в воду" },
-  { icon: "🔥", title: "Сжигание мусора" },
-  { icon: "🌳", title: "Вырубка деревьев" },
+  { icon: "🗑", key: "home.problems.cards.illegal_dumps" },
+  { icon: "🌫", key: "home.problems.cards.air_pollution" },
+  { icon: "💧", key: "home.problems.cards.water_dumping" },
+  { icon: "🔥", key: "home.problems.cards.trash_burning" },
+  { icon: "🌳", key: "home.problems.cards.tree_cutting" },
 ];
 
 export default function Home({ onNavigate, lang }) {
@@ -42,16 +42,14 @@ export default function Home({ onNavigate, lang }) {
       {/* HERO */}
       <div className="card hero heroGrid">
         <div className="heroLeft">
-          <div className="pill">Smart City • MVP</div>
+          <div className="pill">{t(lang, "home.pill")}</div>
           <h1 className="heroTitle">{t(lang, "home.title")}</h1>
           <p className="heroSub muted">{t(lang, "home.subtitle")}</p>
 
           <div className="note">
-            <div className="noteTitle">Важно</div>
+            <div className="noteTitle">{t(lang, "home.note.title")}</div>
             <div className="noteText">
-              ❌ Жалобы <b>не отправляются напрямую в акимат</b>. <br />
-              ✅ Платформа принимает обращения, анализирует, визуализирует и подготавливает данные для возможной будущей
-              интеграции.
+              {t(lang, "home.note.text")}
             </div>
           </div>
 
@@ -68,47 +66,47 @@ export default function Home({ onNavigate, lang }) {
 
           <div className="heroStats">
             <div className="statChip">
-              <div className="statLabel">Анализ</div>
-              <div className="statValue">AI-классификация</div>
+              <div className="statLabel">{t(lang, "home.stats.analysis.label")}</div>
+              <div className="statValue">{t(lang, "home.stats.analysis.value")}</div>
             </div>
             <div className="statChip">
-              <div className="statLabel">Прозрачность</div>
-              <div className="statValue">Открытая аналитика</div>
+              <div className="statLabel">{t(lang, "home.stats.transparency.label")}</div>
+              <div className="statValue">{t(lang, "home.stats.transparency.value")}</div>
             </div>
             <div className="statChip">
-              <div className="statLabel">Фокус</div>
-              <div className="statValue">Экология города</div>
+              <div className="statLabel">{t(lang, "home.stats.focus.label")}</div>
+              <div className="statValue">{t(lang, "home.stats.focus.value")}</div>
             </div>
           </div>
         </div>
 
         <div className="heroRight">
           <div className="heroVisual">
-            <div className="heroVisualTitle">Город в цифрах</div>
+            <div className="heroVisualTitle">{t(lang, "home.visual.title")}</div>
             <div className="heroVisualText">
-              Быстрая фиксация проблем → авто-классификация → дашборд → готовые данные для решений.
+              {t(lang, "home.visual.text")}
             </div>
 
             <div className="heroVisualGrid">
               <div className="kpi">
-                <div className="kpiTitle">Скорость</div>
-                <div className="kpiValue">Минуты</div>
-                <div className="kpiSub muted">на регистрацию</div>
+                <div className="kpiTitle">{t(lang, "home.kpi.speed.title")}</div>
+                <div className="kpiValue">{t(lang, "home.kpi.speed.value")}</div>
+                <div className="kpiSub muted">{t(lang, "home.kpi.speed.sub")}</div>
               </div>
               <div className="kpi">
-                <div className="kpiTitle">Качество</div>
-                <div className="kpiValue">Единый формат</div>
-                <div className="kpiSub muted">для анализа</div>
+                <div className="kpiTitle">{t(lang, "home.kpi.quality.title")}</div>
+                <div className="kpiValue">{t(lang, "home.kpi.quality.value")}</div>
+                <div className="kpiSub muted">{t(lang, "home.kpi.quality.sub")}</div>
               </div>
               <div className="kpi">
-                <div className="kpiTitle">Данные</div>
-                <div className="kpiValue">Heatmap</div>
-                <div className="kpiSub muted">и тренды</div>
+                <div className="kpiTitle">{t(lang, "home.kpi.data.title")}</div>
+                <div className="kpiValue">{t(lang, "home.kpi.data.value")}</div>
+                <div className="kpiSub muted">{t(lang, "home.kpi.data.sub")}</div>
               </div>
               <div className="kpi">
-                <div className="kpiTitle">Прозрачность</div>
-                <div className="kpiValue">Dashboard</div>
-                <div className="kpiSub muted">для города</div>
+                <div className="kpiTitle">{t(lang, "home.kpi.transparency.title")}</div>
+                <div className="kpiValue">{t(lang, "home.kpi.transparency.value")}</div>
+                <div className="kpiSub muted">{t(lang, "home.kpi.transparency.sub")}</div>
               </div>
             </div>
           </div>
@@ -119,17 +117,23 @@ export default function Home({ onNavigate, lang }) {
       <div className="card">
         <div className="sectionHead">
           <div>
-            <div className="sectionTitleBig">Какие проблемы можно сообщить</div>
-            <div className="muted">Выберите тип обращения — платформа поможет структурировать и визуализировать данные.</div>
+            <div className="sectionTitleBig">{t(lang, "home.problems.title")}</div>
+            <div className="muted">{t(lang, "home.problems.subtitle")}</div>
           </div>
         </div>
 
         <div className="problemGrid">
           {PROBLEM_CARDS.map((c) => (
-            <div key={c.title} className="problemCard" onClick={() => onNavigate("report")} role="button" tabIndex={0}>
+            <div
+              key={c.key}
+              className="problemCard"
+              onClick={() => onNavigate("report")}
+              role="button"
+              tabIndex={0}
+            >
               <div className="problemIcon">{c.icon}</div>
-              <div className="problemTitle">{c.title}</div>
-              <div className="problemHint muted">Нажмите, чтобы сообщить</div>
+              <div className="problemTitle">{t(lang, c.key)}</div>
+              <div className="problemHint muted">{t(lang, "home.problems.hint")}</div>
             </div>
           ))}
         </div>
@@ -139,48 +143,47 @@ export default function Home({ onNavigate, lang }) {
       <div className="card">
         <div className="sectionHead">
           <div>
-            <div className="sectionTitleBig">Почему это важно для города?</div>
-            <div className="muted">Кратко и по делу — позиционирование как smart city стартап.</div>
+            <div className="sectionTitleBig">{t(lang, "home.invest.title")}</div>
+            <div className="muted">{t(lang, "home.invest.subtitle")}</div>
           </div>
         </div>
 
         <div className="valueGrid">
           <div className="valueCard">
             <div className="valueIcon">🚀</div>
-            <div className="valueTitle">Ускоряет обработку жалоб</div>
+            <div className="valueTitle">{t(lang, "home.invest.cards.speed.title")}</div>
             <div className="valueText muted">
-              Быстрая регистрация обращений с фото и геометкой. Данные сразу готовы для фильтрации и анализа.
+              {t(lang, "home.invest.cards.speed.text")}
             </div>
           </div>
 
           <div className="valueCard">
             <div className="valueIcon">🏛</div>
-            <div className="valueTitle">Снижает нагрузку на акимат</div>
+            <div className="valueTitle">{t(lang, "home.invest.cards.load.title")}</div>
             <div className="valueText muted">
-              Платформа агрегирует обращения, автоматизирует первичную классификацию и снижает ручную рутину.
+              {t(lang, "home.invest.cards.load.text")}
             </div>
           </div>
 
           <div className="valueCard">
             <div className="valueIcon">🔍</div>
-            <div className="valueTitle">Повышает прозрачность процессов</div>
+            <div className="valueTitle">{t(lang, "home.invest.cards.transparency.title")}</div>
             <div className="valueText muted">
-              Публичная аналитика и статусы обращений дают прозрачную картину проблемных зон.
+              {t(lang, "home.invest.cards.transparency.text")}
             </div>
           </div>
 
           <div className="valueCard">
             <div className="valueIcon">📊</div>
-            <div className="valueTitle">Формирует открытые данные для аналитики</div>
+            <div className="valueTitle">{t(lang, "home.invest.cards.opendata.title")}</div>
             <div className="valueText muted">
-              Heatmap и тренды позволяют видеть динамику и принимать решения на основе данных.
+              {t(lang, "home.invest.cards.opendata.text")}
             </div>
           </div>
         </div>
 
         <div className="disclaimer">
-          <b>Важно:</b> сервис не имитирует государственные интеграции. Это независимая платформа для сбора, анализа и
-          визуализации обращений.
+          <b>{t(lang, "home.disclaimer.bold")}</b> {t(lang, "home.disclaimer.text")}
         </div>
       </div>
 
@@ -188,7 +191,7 @@ export default function Home({ onNavigate, lang }) {
       <div className="stack">
         {mapError ? (
           <div className="errorBox">
-            Карта: не удалось загрузить данные. <span className="muted">{mapError}</span>
+            {t(lang, "home.map.error")} <span className="muted">{mapError}</span>
           </div>
         ) : null}
         <CityMap complaints={complaints} />
@@ -198,20 +201,36 @@ export default function Home({ onNavigate, lang }) {
       <div className="card">
         <div className="sectionHead">
           <div>
-            <div className="sectionTitleBig">Связаться с нами</div>
-            <div className="muted">Вопросы пользователей • обратная связь • контакты для партнёров и представителей города</div>
+            <div className="sectionTitleBig">{t(lang, "home.contacts.title")}</div>
+            <div className="muted">
+              {t(lang, "home.contacts.subtitle")}
+            </div>
           </div>
         </div>
 
         <div className="contactGrid">
           <div className="contactCard">
-            <div className="contactLabel muted">Email</div>
+            <div className="contactLabel muted">{t(lang, "home.contacts.email")}</div>
             <div className="contactValue">smart.shym_city@mail.ru</div>
           </div>
           <div className="contactCard">
-            <div className="contactLabel muted">Телефон</div>
+            <div className="contactLabel muted">{t(lang, "home.contacts.phone")}</div>
             <div className="contactValue">8 705 845 80 43</div>
           </div>
+
+          {/* ДОБАВЛЕНО ТОЛЬКО ЭТО */}
+          <div className="contactCard">
+            <div className="contactLabel muted">{t(lang, "home.contacts.instagram")}</div>
+            <a
+              href="https://www.instagram.com/smart.shym_city?igsh=d3o5MWl4bzE2cWN5"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="contactValue"
+            >
+              @smart.shym_city
+            </a>
+          </div>
+          {/* КОНЕЦ ДОБАВЛЕНИЯ */}
         </div>
       </div>
     </div>
